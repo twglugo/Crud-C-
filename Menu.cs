@@ -108,9 +108,9 @@ namespace MenuInteractivo
         public void AutoInserccion()
         {
 
-            p.SetFecha(ObtenerFecha("Insertar"));
-            p.SetPrecio(ObtenerPrecio("Insertar"));
             p.SetNombre(ObtenerNombre("Insertar"));
+            p.SetPrecio(ObtenerPrecio("Insertar"));
+            p.SetFecha(ObtenerFecha("Insertar"));
             p2.InsertarProducto();
 
         }
@@ -122,7 +122,7 @@ namespace MenuInteractivo
         public void Autoeliminar()
         {
             p1.ConsultaProducto();
-            p4.BorrarProducto(ObtenerId("Eliminar"));
+            p4.BorrarProducto(ObtenerId("Eliminar"),Comprobador());
         }
 
         /* Modificadores */
@@ -132,14 +132,14 @@ namespace MenuInteractivo
         { 
             p1.ConsultaProducto();
             
-            if (p3.ModificarNombre(ObtenerNombre("Modificar"), ObtenerId("Modificar")))
+            if (p3.ModificarNombre(ObtenerNombre("Modificar"), ObtenerId("Modificar"),Comprobador()))
             {
                 Console.WriteLine("Exito............");
                 
             }
             else
             {
-                Console.WriteLine("Error al Modificar..............");
+                Console.WriteLine("No se Modifico..............");
             }
 
         }
@@ -149,7 +149,7 @@ namespace MenuInteractivo
 
             p1.ConsultaProducto();
             
-            if (p3.ModificarPrecio(ObtenerId("Modificar"), ObtenerPrecio("Modificar")))
+            if (p3.ModificarPrecio(ObtenerId("Modificar"), ObtenerPrecio("Modificar"),Comprobador()))
             {
                 Console.WriteLine("Exito.....");
                 
@@ -168,7 +168,7 @@ namespace MenuInteractivo
         public void AutoModificarFecha()
         {
             p1.ConsultaProducto();
-            if (p3.ModificarFecha(ObtenerFecha("Modificar"), ObtenerId("Modificar")))
+            if (p3.ModificarFecha(ObtenerFecha("Modificar"), ObtenerId("Modificar"),Comprobador()))
             {
                 Console.WriteLine("Exitos....................");
                 
@@ -183,7 +183,7 @@ namespace MenuInteractivo
 
         public void AutoModificarTodo()
         {
-            if (p3.ModificarTotal(ObtenerNombre("Modificar"), ObtenerPrecio("Modificar"), ObtenerFecha("Modificar"), ObtenerId("Modificar")))
+            if (p3.ModificarTotal(ObtenerNombre("Modificar"), ObtenerPrecio("Modificar"), ObtenerFecha("Modificar"), ObtenerId("Modificar"), Comprobador()))
             {
                 Console.WriteLine("Exitos..........");
                 
@@ -333,7 +333,36 @@ namespace MenuInteractivo
             }
         }
 
-        public void MostrarMenu (string fase){
+        //Obtener reconfirmacion S/N    
+        
+        public bool Comprobador()
+        {
+            while (true)
+            {
+                Console.Write("¿Deseas ejecutar el cambio? (S/N): ");
+                string? op = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(op))
+                {
+                    Console.WriteLine("Entrada vacía. Escribe S o N.");
+                    continue;
+                }
+
+                if (op.Equals("S", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                if (op.Equals("N", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                Console.WriteLine("Entrada inválida. Escribe S o N.");
+            }
+        }
+
+        public void MostrarMenu(string fase)
+        {
 
             if (fase.Equals("Menu"))
             {
@@ -345,9 +374,10 @@ namespace MenuInteractivo
                 Console.WriteLine("Opcion: 5 -> Salir");
                 Console.WriteLine("----------------------------");
 
-            }else if (fase.Equals("Modificar"))
+            }
+            else if (fase.Equals("Modificar"))
             {
-                
+
                 Console.WriteLine("----------------------------");
                 Console.WriteLine("Opcion: 1 -> Modificar Todo ");
                 Console.WriteLine("Opcion: 2 -> Modificar Nombre");

@@ -36,6 +36,8 @@ namespace Entidad
         public void SetNombre(string Nombre) => this.Nombre = Nombre;
         public void SetPrecio(int Precio) => this.Precio = Precio;
         public void SetFecha(DateTime Fecha) => this.Fecha = Fecha;
+
+        
     }
 }
 
@@ -55,9 +57,10 @@ namespace Manipulacion
         {
             this.producto = producto;
         }
+
         public ProductoManipulacion()
         {
-            
+            producto = new Producto();
         }
 
         //Insertar datos a la BD
@@ -194,7 +197,7 @@ namespace Modificar
     public class ModificadorProducto
     {
 
-        Producto p;
+        private Producto? p;
 
         public ModificadorProducto(Producto P)
         {
@@ -209,7 +212,7 @@ namespace Modificar
         //Modificar Nombre -> por ID
 
 
-        public bool ModificarNombre(string Nombre, int Id)
+        public bool ModificarNombre(string Nombre, int Id, bool Comprobador)
         {
             using (MySqlConnection Conexion = Conecta.ObtenerConexion())
             {
@@ -224,29 +227,26 @@ namespace Modificar
                     MySqlCommand Comando = new MySqlCommand(Query, Conexion);
                     Comando.Parameters.AddWithValue("@Nombre", Nombre);
                     Comando.Parameters.AddWithValue("@Id", Id);
-                    Console.Write("¿Deseas ejecutar el cambio? (S/N): ");
-                    String? Op = Console.ReadLine();
-                    if (Op.Equals("S", StringComparison.OrdinalIgnoreCase))
+
+                    bool continuar = Comprobador;          
+                    if (!continuar)
                     {
-                        if (Comando.ExecuteNonQuery() > 0)
-                        {
-
-                            Console.WriteLine("Cambio realizado............................");
-                            return true;
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("No se realizo el cambio no se encontro el ID");
-
-                        }
-
+                        Console.WriteLine("Cancelando.......");
+                        return false;
                     }
-                    else if (Op.Equals("N", StringComparison.OrdinalIgnoreCase))
+                     
+                    int filas = Comando.ExecuteNonQuery();   
+
+                    if (filas > 0)
                     {
-                        Console.WriteLine("Cancelando..................................");
-
+                        return true;                         
                     }
+                    else
+                    {
+                        Console.WriteLine("No se encontró el Id......");
+                        return false;                        
+                    }
+                    
 
 
 
@@ -255,7 +255,7 @@ namespace Modificar
                 catch (MySqlException e)
                 {
                     Console.WriteLine(e.Message);
-                    
+
                 }
                 catch (System.Exception e)
                 {
@@ -271,9 +271,11 @@ namespace Modificar
 
         }
 
+        
+
 
         // Modificar por Precio 
-        public bool ModificarPrecio(int Id, int Precio)
+        public bool ModificarPrecio(int Id, int Precio, bool Comprobador)
         {
 
             using (MySqlConnection Conexion = Conecta.ObtenerConexion())
@@ -287,28 +289,23 @@ namespace Modificar
                     MySqlCommand Comando = new MySqlCommand(Query, Conexion);
                     Comando.Parameters.AddWithValue("@Precio", Precio);
                     Comando.Parameters.AddWithValue("@Id", Id);
-                    Console.Write("¿Deseas ejecutar el cambio? (S/N): ");
-                    String? Op = Console.ReadLine();
-
-                    if (Op.Equals("S", StringComparison.OrdinalIgnoreCase))
+                    bool continuar = Comprobador;          
+                    if (!continuar)
                     {
-
-                        if (Comando.ExecuteNonQuery() > 0)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("No se ha podido modificar ");
-                            return false;
-                        }
-
-
-
+                        Console.WriteLine("Cancelando.......");
+                        return false;
                     }
-                    else if (Op.Equals("N", StringComparison.OrdinalIgnoreCase))
+                     
+                    int filas = Comando.ExecuteNonQuery();   
+
+                    if (filas > 0)
                     {
-                        Console.WriteLine("Cancelando........................");
+                        return true;                         
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se encontró el Id......");
+                        return false;                        
                     }
 
 
@@ -332,7 +329,7 @@ namespace Modificar
 
         //Modificador por Fecha 
 
-        public bool ModificarFecha(DateTime Fecha, int Id)
+        public bool ModificarFecha(DateTime Fecha, int Id, bool Comprobador)
         {
 
             using (MySqlConnection Conexion = Conecta.ObtenerConexion())
@@ -346,28 +343,23 @@ namespace Modificar
 
                     Comando.Parameters.AddWithValue("@Fecha", Fecha);
                     Comando.Parameters.AddWithValue("@Id", Id);
-                    Console.WriteLine("¿Deseas ejecutar el cambio? (S/N): ");
-                    String? Op = Console.ReadLine();
-                    if (Op.Equals("S", StringComparison.OrdinalIgnoreCase))
+                    bool continuar = Comprobador;          
+                    if (!continuar)
                     {
-
-                        if (Comando.ExecuteNonQuery() > 0)
-                        {
-                            Console.WriteLine("Se ha actualizado con exito ");
-                            return true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ha habido un error....................");
-                           
-                            return false;
-                        }
-                    }
-                    else if (Op.Equals("N", StringComparison.OrdinalIgnoreCase))
-                    {
-
-                        Console.WriteLine("Cancelando................................");
+                        Console.WriteLine("Cancelando.......");
                         return false;
+                    }
+                     
+                    int filas = Comando.ExecuteNonQuery();   
+
+                    if (filas > 0)
+                    {
+                        return true;                         
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se encontró el Id......");
+                        return false;                        
                     }
 
 
@@ -399,7 +391,7 @@ namespace Modificar
         //Modificar todo -> Nombre, Precio, Fecha
 
 
-        public bool ModificarTotal(String Nombre, int Precio, DateTime Fecha, int Id)
+        public bool ModificarTotal(String Nombre, int Precio, DateTime Fecha, int Id, bool Comprobador)
         {
             using (MySqlConnection Conexion = Conecta.ObtenerConexion())
             {
@@ -415,29 +407,23 @@ namespace Modificar
                     Comando.Parameters.AddWithValue("@Fecha", Fecha);
 
                     Comando.Parameters.AddWithValue("@Id", Id);
-                    Console.WriteLine("¿Deseas ejecutar el cambio? (S/N): ");
-                    String? Op = Console.ReadLine();
-
-                    if (Op.Equals("S", StringComparison.OrdinalIgnoreCase))
+                    bool continuar = Comprobador;          
+                    if (!continuar)
                     {
-                        if (Comando.ExecuteNonQuery() > 0)
-                        {
-                            Console.WriteLine("Modificando....................");
-                            return true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Error......................");
-                            return false;
-                        }
-
-
-
-                    }
-                    else if (Op.Equals("N", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Console.WriteLine("Cancelando.....................");
+                        Console.WriteLine("Cancelando.......");
                         return false;
+                    }
+                     
+                    int filas = Comando.ExecuteNonQuery();   
+
+                    if (filas > 0)
+                    {
+                        return true;                         
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se encontró el Id......");
+                        return false;                        
                     }
 
 
@@ -501,7 +487,7 @@ namespace Eliminar
 
         //Eliminar producto 
 
-        public bool BorrarProducto(int Id)
+        public bool BorrarProducto(int Id, bool Comprobador)
         {
 
             using (MySqlConnection Conexion = Conecta.ObtenerConexion())
@@ -516,30 +502,24 @@ namespace Eliminar
                 MySqlCommand Comando = new MySqlCommand(Query, Conexion);
                 Comando.Parameters.AddWithValue("@Id", Id);
                 
-                Console.Write("¿Deseas Eliminar el Producto? (S/N): ");
-                String? Opcion = Console.ReadLine();
-
-                if (Opcion.Equals("S", StringComparison.OrdinalIgnoreCase))
-                {
-
-                        if (Comando.ExecuteNonQuery() > 0)
-                        {
-
-                            Console.WriteLine("Se ha borrado el producto con exito");
-                            return true; 
-
+                bool continuar = Comprobador;          
+                    if (!continuar)
+                    {
+                        Console.WriteLine("Cancelando.......");
+                        return false;
                     }
-                        else
-                        {
+                     
+                    int filas = Comando.ExecuteNonQuery();   
 
-                            Console.WriteLine("Error no se ha encontrado el id : " + Id);
-                        }
-
-                }
-                else
-                {
-                    Console.WriteLine("Se nego la operacion");
-                }
+                    if (filas > 0)
+                    {
+                        return true;                         
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se encontró el Id......");
+                        return false;                        
+                    }
 
                 }
                 catch (System.Exception e)
@@ -552,7 +532,7 @@ namespace Eliminar
             }
 
 
-            return false;
+            
         }
 
 
