@@ -1,0 +1,9 @@
+# Archivos de compilación
+bin/
+obj/
+
+# Configuraciones del IDE
+*.user
+*.suo
+*.vs/
+*.log
