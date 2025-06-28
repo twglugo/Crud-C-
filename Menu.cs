@@ -388,6 +388,17 @@ namespace MenuInteractivo
 
 
             }
+            else if (fase.Equals("Consultar"))
+            {
+                Console.WriteLine("----------------------------");
+                Console.WriteLine("Opcion: 1 -> Consultar Todo ");
+                Console.WriteLine("Opcion: 2 -> Consultar por Nombre");
+                Console.WriteLine("Opcion: 3 -> Consultar por Precio");
+                Console.WriteLine("Opcion: 4 -> Consultar por Fecha");
+                Console.WriteLine("Opcion: 5 -> Volver al menú principal");
+                Console.WriteLine("----------------------------");
+                
+            }
 
 
         }
