@@ -50,14 +50,14 @@ namespace MenuInteractivo
         //Menú Principal
         public bool Interaccion()
         {
-            MostrarMenu("Menu");
-            switch (Opcion())
+            
+            switch (Opcion(MostrarMenu("Menu")))
             {
                 case 1: //Insertar
                     AutoInserccion();
                     break;
                 case 2: // Consultar
-                    p1.ConsultaProducto();
+                    MenuConsulta();
                     break;
                 case 3: // Modificar
                     MenuModificar();
@@ -79,8 +79,8 @@ namespace MenuInteractivo
         
         public void MenuModificar()
         {
-            MostrarMenu("Modificar");
-            switch (Opcion())
+            
+            switch (Opcion(MostrarMenu("Modificar")))
             {
                 case 1: //Modificar->Todo
                     AutoModificarTodo();
@@ -103,6 +103,42 @@ namespace MenuInteractivo
 
             }
         }
+        //Menu -> Consultas
+
+        public void MenuConsulta()
+        {
+            
+            switch (Opcion(MostrarMenu("Consultar")))
+            {
+                case 1: //Consultar->Todo
+                    AutoConsultaTodo();
+                    break;
+                case 2: // Consultar por Nombre
+                    AutoConsultaNombre();
+                    break;
+                case 3: // Consultar por Precio
+                    AutoConsultaPrecio();
+                    break;
+                case 4: // Consultar por Fecha
+                    AutoConsultaFecha();
+
+                    break;
+                case 5: //Consulta por Nombre y Precio
+                    AutoConsultaNombrePrecio();
+                    break;
+                case 6: //Consulta por Nombre y Fecha 
+                    AutoConsultaNombreFecha();
+                    break;
+                case 7: //Consulta por Precio y Fecha
+                    AutoConsultaPrecioFecha();
+                    break;
+                default:
+                    Console.WriteLine("Volviendo..........................");
+                    Interaccion();
+
+                    break;
+            }
+        }
 
 
         public void AutoInserccion()
@@ -121,21 +157,79 @@ namespace MenuInteractivo
 
         public void Autoeliminar()
         {
-            p1.ConsultaProducto();
+            AutoConsultaTodo();
             p4.BorrarProducto(ObtenerId("Eliminar"),Comprobador());
         }
 
-        /* Modificadores */
+
+        /*------------------------------*/
+        /*          Consultas            */
+        /*------------------------------*/
+
+
+        //Consultar todo
+        public void AutoConsultaTodo()
+        {
+            Recorrer(p1.ConsultaProducto());
+        }
+
+
+       //Consultar por Nombre
+        public void AutoConsultaNombre()
+        {
+            Recorrer(p1.ConsultaProductoNombre(ObtenerNombre("Consultar")));
+        }
+
+        //Consultar por Precio
+        public void AutoConsultaPrecio()
+        {
+            Recorrer(p1.ConsultaProductoPrecio(ObtenerPrecio("Consultar")));
+        }
+
+        //Consultar por Fecha
+        public void AutoConsultaFecha()
+        {
+            Recorrer(p1.ConsultaProductoFecha(ObtenerFecha("Consultar")));
+        }
+
+        //Consultar por Nombre y Precio
+        public void AutoConsultaNombrePrecio()
+        {
+            Recorrer(p1.ConsultaProductoNombrePrecio(ObtenerNombre("Consultar"),ObtenerPrecio("Consultar")));
+        }
+
+        //Consultar por Nombre y Fecha
+        public void AutoConsultaNombreFecha()
+        {
+            Recorrer(p1.ConsultaProductoNombreFecha(ObtenerNombre("Consultar"),ObtenerFecha("Consultar")));
+        }
+
+        //Consultar por Precio Y Fecha
+        public void AutoConsultaPrecioFecha()
+        {
+            Recorrer(p1.ConsultaProductoPrecioFecha(ObtenerPrecio("Consultar"),ObtenerFecha("Consultar")));
+        }
+
         
 
+
+
+
+
+        /* Modificadores */
+        /*------------------------------*/
+        /*          Modificar            */
+        /*------------------------------*/
+
+
         public void AutoModificarNombre()
-        { 
+        {
             p1.ConsultaProducto();
-            
-            if (p3.ModificarNombre(ObtenerNombre("Modificar"), ObtenerId("Modificar"),Comprobador()))
+
+            if (p3.ModificarNombre(ObtenerNombre("Modificar"), ObtenerId("Modificar"), Comprobador()))
             {
                 Console.WriteLine("Exito............");
-                
+
             }
             else
             {
@@ -204,20 +298,20 @@ namespace MenuInteractivo
 
         //Opcion -> Switch
 
-        public int Opcion()
+        public int Opcion(int Total)
         {
             while (true)
             {
                 Console.Write("Escoge una opción: ");
                 string? entrada = Console.ReadLine();
 
-                if (int.TryParse(entrada, out int opcion)&& (opcion > 0 && opcion < 6))
+                if (int.TryParse(entrada, out int opcion)&& (opcion > 0 && opcion <= Total))
                 {
                     return opcion;
                 }
                 else
                 {
-                    Console.WriteLine("Entrada inválida. Debes ingresar un número entero mayor a 0 y menor a  6.");
+                    Console.WriteLine($"Entrada inválida. Debes ingresar un número entero mayor a 0 y menor a  {Total}");
                 }
             }
 
@@ -360,9 +454,29 @@ namespace MenuInteractivo
                 Console.WriteLine("Entrada inválida. Escribe S o N.");
             }
         }
-
-        public void MostrarMenu(string fase)
+        
+        //Mostrar datos o tuplas
+        public void Recorrer(List<Producto> lista)
         {
+            foreach (Entidad.Producto p in lista)
+            {
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("ID: " + p.GetId());
+                Console.WriteLine("Nombre: " + p.GetNombre());
+                Console.WriteLine("Precio: " + p.GetPrecio());
+                Console.WriteLine("Fecha: " + p.GetFecha());
+                Console.WriteLine("-------------------------");
+
+            }
+        }
+        
+        /*------------------------------*/
+        /*          Menus Ux             */
+        /*------------------------------*/
+
+        public int MostrarMenu(string fase)
+        {
+            int total = 0; ;
 
             if (fase.Equals("Menu"))
             {
@@ -373,6 +487,8 @@ namespace MenuInteractivo
                 Console.WriteLine("Opcion: 4 -> Eliminar");
                 Console.WriteLine("Opcion: 5 -> Salir");
                 Console.WriteLine("----------------------------");
+                total = 5;
+                return total;
 
             }
             else if (fase.Equals("Modificar"))
@@ -385,22 +501,29 @@ namespace MenuInteractivo
                 Console.WriteLine("Opcion: 4 -> Modificar Fecha");
                 Console.WriteLine("Opcion: 5 -> Volver al menú principal");
                 Console.WriteLine("----------------------------");
-
+                total = 5;
+                return total;
 
             }
             else if (fase.Equals("Consultar"))
             {
                 Console.WriteLine("----------------------------");
-                Console.WriteLine("Opcion: 1 -> Consultar Todo ");
+                Console.WriteLine("Opcion: 1 -> Consulta total");
                 Console.WriteLine("Opcion: 2 -> Consultar por Nombre");
                 Console.WriteLine("Opcion: 3 -> Consultar por Precio");
                 Console.WriteLine("Opcion: 4 -> Consultar por Fecha");
-                Console.WriteLine("Opcion: 5 -> Volver al menú principal");
+                Console.WriteLine("Opcion: 5 -> Consultar por Nombre y Precio");
+                Console.WriteLine("Opcion: 6 -> Consultar por Nombre y Fecha");
+                Console.WriteLine("Opcion: 7 -> Consultar por Precio y Fecha");
+                Console.WriteLine("Opcion: 8 -> Volver al menú principal");
                 Console.WriteLine("----------------------------");
-                
+                total = 8;
+                return total;
+
             }
 
 
+            return total;
         }
 
 

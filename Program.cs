@@ -6,24 +6,23 @@ using Entidad;
 
 namespace Program
 {
-    
+
 
 
     class Program
     {
         static void Main(string[] args)
-
         {
-            bool Comprobador = true;
-            Console.WriteLine("Bienvenido al sistema de gestión de productos.\n"); 
-            while (Comprobador)
-            {
-                MenuInteractivo.Menu Interacion;
-                Interacion = new MenuInteractivo.Menu();
-                Comprobador = Interacion.Interaccion(); 
-            }
-            Console.WriteLine("La vie en rose ");
+            Console.WriteLine("Bienvenido al sistema de gestión de productos.\n");
 
+            MenuInteractivo.Menu menu = new MenuInteractivo.Menu();
+
+            while (menu.Interaccion())
+            {
+
+            }
+
+            Console.WriteLine("Gracias por usar el sistema. ¡Hasta pronto!");
         }
     }
 }
