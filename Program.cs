@@ -1,12 +1,12 @@
-﻿using System;
-using Entidad;
+﻿
 
 
 
 
 namespace Program
 {
-
+    using System;
+    using Modelos.Producto;
 
 
     class Program
@@ -15,7 +15,7 @@ namespace Program
         {
             Console.WriteLine("Bienvenido al sistema de gestión de productos.\n");
 
-            MenuInteractivo.Menu menu = new MenuInteractivo.Menu();
+            InterfazUsuario.Menu menu = new InterfazUsuario.Menu();
 
             while (menu.Interaccion())
             {

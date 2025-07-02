@@ -7,7 +7,7 @@ Este es un sistema de consola en C# que permite realizar operaciones CRUD (Crear
 
 ## 📦 Funcionalidades
 
-- ✅ Insertar productos (nombre, precio y fecha) Proximamente cantidad 
+- ✅ Insertar productos (nombre, precio y fecha) *(¡próximamente campo "cantidad"!)*
 - ✅ Consultar productos:
   - Todos
   - Por nombre
@@ -23,24 +23,16 @@ Este es un sistema de consola en C# que permite realizar operaciones CRUD (Crear
 
 ---
 
-## 🧱 Estructura del proyecto
+### 🧩 Organización por capas
 
-```bash
-/Entidad
-    Producto.cs
-/Manipulacion
-    ProductoManipulacion.cs
-/Consulta
-    ProductoConsulta.cs
-/Modificar
-    ModificadorProducto.cs
-/Eliminar
-    EliminarProducto.cs
-/MenuInteractivo
-    Menu.cs
-Program.cs
-bdCrud.sql
-```
+| Capa             | Función principal                                      |
+|------------------|--------------------------------------------------------|
+| `Modelo`         | Entidades que representan la estructura de datos      |
+| `Logica`         | Operaciones de negocio (CRUD puro)                    |
+| `Controlador`    | Coordina acciones entre lógica y entrada de usuario   |
+| `InterfazUsuario`| Entrada/salida por consola y navegación de menús      |
+| `Data`           | Manejo de la conexión a la base de datos              |
+| `Script`         | Documento de Bd o relacionados a información          |
 
 ---
 

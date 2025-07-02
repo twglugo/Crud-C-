@@ -1,4 +1,6 @@
-using MySql.Data.MySqlClient;
+namespace Data{
+
+    using MySql.Data.MySqlClient;
 
 public static class Conecta
 {
@@ -8,5 +10,8 @@ public static class Conecta
     {
         return new MySqlConnection(connectionString);
     }
+}
+
+
 }
 
